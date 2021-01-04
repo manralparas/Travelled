@@ -1,8 +1,12 @@
 <%-include('partials/header')-%>
 <% if(found) { %> 
+<div class="text-center">
 <h1><%= found.name%></h1>
-<img src="<%=found.image%>">
-<p><%= found.description%> </p>
+</div>
+<img class="img-thumbnail rounded mx-auto d-block" src="<%=found.image%>">
+<h3 class="d-block text-center"><%= found.description%> </h3>
 <% } %>
 
-<%- include('partials/footer')  -%>i
+<%- include('partials/footer')  -%>
+
+

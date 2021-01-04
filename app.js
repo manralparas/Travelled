@@ -1,31 +1,29 @@
-var express = require("express");
-var app= express();
-var bodyParser = require("body-parser");
+const express = require("express");
+const app= express();
+const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
+const Campground=require("./models/campground");
+// const Comment= require("./models/comment");
+// const User = require("./models/user");
+const seedDb = require("./seed");
+seedDb();
 mongoose.connect("mongodb+srv://paras:CFMFV0UOQPA1Y8Ic@cluster0.y8o7g.mongodb.net/camp?retryWrites=true&w=majority",{ useNewUrlParser: true ,useUnifiedTopology: true,});
 
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.set("view engine","ejs");
 
-const campgroundSchema = new mongoose.Schema({
-    name:String ,
-    image:String,
-    description:String 
-})
 
-const Campground = mongoose.model('Campground',campgroundSchema);
 
-app.get('/',function(req,res){
-
+app.get('/',(req,res)=>{
     res.render("landing");
 
 })
-app.get('/campground',function(req,res){
+app.get('/campground',(req,res)=>{
    Campground.find({},(err,campground)=>{
        if(err)
        {
-           console.log("error found in database")
+           console.log(err);
        }
        else{
            console.log("data reteirved successfully ")
@@ -39,9 +37,11 @@ app.get('/campground',function(req,res){
 app.post('/campground',(req,res)=>{
     const place_name=req.body.name;
     const place_image=req.body.image;
+    const place_description= req.body.description;
     const create={
         name:place_name,
-        image:place_image
+        image:place_image,
+        description:place_description
     }
     Campground.create(create,(err,newone)=>
     {
@@ -69,13 +69,21 @@ app.get('/campground/:id',(req,res)=>
         if(err)
         console.log(err);
         else
+        {
+                console.log(found);
         res.render("show",{found:found});
+        }
     }
     )
-    res.render('show');
 })
-app.listen(8000,function(){
+app.get("/campgrounds/:id/comments/new",(req,res)=>{
+  res.send("welcome to comment page");
+}
+)
+const PORT = 8000
+app.listen(PORT,()=>{
 
-console.log("server running on port 8000");
+console.log(`server running on port ${PORT}
+Welcome to Yelpcamp`);
 
 })
