@@ -1,21 +1,40 @@
-const express = require("express");
-const app= express();
-const bodyParser = require("body-parser");
-const mongoose = require('mongoose');
-const Campground=require("./models/campground");
-const Comment= require("./models/comment");
-// const User = require("./models/user");
-// const deleteDb = require("./seed");
-// deleteDb(); 
+//Imports
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+const express = require("express"),
+    app= express(),
+    bodyParser = require("body-parser"),
+    mongoose = require('mongoose'),
+    Campground=require("./models/campground"),
+    Comment= require("./models/comment"),
+    passport = require("passport"),
+    User = require("./models/user"),
+    localStrategy=require("passport-local");
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------Mongo Secret DNS Seed List--------------------------------------------------------------------------------------------
 mongoose.connect("mongodb+srv://paras:CFMFV0UOQPA1Y8Ic@cluster0.y8o7g.mongodb.net/camp?retryWrites=true&w=majority",{ useNewUrlParser: true ,useUnifiedTopology: true,});
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+//Middleware
 app.use(bodyParser.urlencoded({extended:true}));
-
 app.set("view engine","ejs");
 app.use(express.static("public"))
+//------------------------------------------------------------------------------------------------------------------
 
+//Passport JS Configuration
+app.use(require("express-session")({
+    secret:"ANY_SECRET_KEY",
+    resave:false,
+    saveUninitialized:false,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-
+//-------------------------------------------------------------------------------------------------------------------------
+//                                HANDLING ROUTES
+//--------------------------------------------------------------------------------------------------------------------------------- 
 app.get('/',(req,res)=>{
     res.render("landing");
 
@@ -27,8 +46,6 @@ app.get('/campground',(req,res)=>{
            console.log(err);
        }
        else{
-           console.log("data reteirved successfully ")
-
             res.render("campground/camping",{campground:campground});
        }
    }) 
@@ -36,21 +53,20 @@ app.get('/campground',(req,res)=>{
 })
 
 app.post('/campground',(req,res)=>{
-    const place_name=req.body.name;
-    const place_image=req.body.image;
-    const place_description= req.body.description;
+    const placeName=req.body.name;
+    const placeImage=req.body.image;
+    const placeDescription= req.body.description;
     const create={
-        name:place_name,
-        image:place_image,
-        description:place_description
-    }
+        name:placeName,
+        image:placeImage,
+        description:placeDescription
+    };
     Campground.create(create,(err,newone)=>
     {
         if(err)
-        console.log("Something went wrong ");
+        console.log(err);
         else
         {
-            console.log("Data is created successfully ");
             res.redirect('/campground');
         }
     })
@@ -112,6 +128,24 @@ app.post("/campground/:id/comments",(req,res)=>{
             }
      })
 })
+//Autentication ROUTES
+app.get("/register",(req,res)=>{
+        res.render("register");
+})
+app.post("/register",(req,res)=>{
+    User.register(new User({username:req.body.username}),req.body.password,(err,user)=>{
+        if(err)
+        {
+            console.log(err);
+            res.redirect("/register");
+        }
+        passport.authenticate("local")(req,res,()=>
+        res.redirect("/campground"));
+    })
+})
+
+//Serving App
+
 const PORT = 8000
 app.listen(PORT,()=>{
 
