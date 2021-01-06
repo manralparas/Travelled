@@ -7,7 +7,7 @@ const Comment= require("./models/comment");
 // const User = require("./models/user");
 // const deleteDb = require("./seed");
 // deleteDb(); 
-mongoose.connect("mongodb+srv://paras:CFMFV0UOQPA1Y8Ic@cluster0.y8o7g.mongodb.net/camp?retryWrites=true&w=majority",{ useNewUrlParser: true ,useUnifiedTopology: true,});
+mongoose.connect("mongodb+srv://secret",{ useNewUrlParser: true ,useUnifiedTopology: true,});
 
 app.use(bodyParser.urlencoded({extended:true}));
 
