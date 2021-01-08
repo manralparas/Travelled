@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //Imports
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 const express = require("express"),
@@ -16,6 +17,19 @@ mongoose.connect(keyUrl,{ useNewUrlParser: true ,useUnifiedTopology: true,});
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //Middleware
+=======
+const express = require("express");
+const app= express();
+const bodyParser = require("body-parser");
+const mongoose = require('mongoose');
+const Campground=require("./models/campground");
+const Comment= require("./models/comment");
+// const User = require("./models/user");
+// const deleteDb = require("./seed");
+// deleteDb(); 
+mongoose.connect("mongodb+srv://secret",{ useNewUrlParser: true ,useUnifiedTopology: true,});
+
+>>>>>>> 0da4f24164025c0e0609d496be998c21e243bbb2
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs");
 app.use(express.static("public"))
