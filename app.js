@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 //Imports
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 const express = require("express"),
@@ -17,19 +16,6 @@ mongoose.connect(keyUrl,{ useNewUrlParser: true ,useUnifiedTopology: true,});
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //Middleware
-=======
-const express = require("express");
-const app= express();
-const bodyParser = require("body-parser");
-const mongoose = require('mongoose');
-const Campground=require("./models/campground");
-const Comment= require("./models/comment");
-// const User = require("./models/user");
-// const deleteDb = require("./seed");
-// deleteDb(); 
-mongoose.connect("mongodb+srv://secret",{ useNewUrlParser: true ,useUnifiedTopology: true,});
-
->>>>>>> 0da4f24164025c0e0609d496be998c21e243bbb2
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs");
 app.use(express.static("public"))
@@ -46,6 +32,12 @@ app.use(passport.session());
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+const isLogin=(req,res,next)=>{
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login")
+}
 
 //-------------------------------------------------------------------------------------------------------------------------
 //                                HANDLING ROUTES
@@ -108,7 +100,7 @@ app.get('/campground/:id',(req,res)=>
     }
     )
 })
-app.get("/campground/:id/comments/new",(req,res)=>{
+app.get("/campground/:id/comments/new",isLogin(),(req,res)=>{
     Campground.findById(req.params.id,(err,campground)=>{
                 if(err)
                 console.log(err);
@@ -119,7 +111,7 @@ app.get("/campground/:id/comments/new",(req,res)=>{
 }
 );
 
-app.post("/campground/:id/comments",(req,res)=>{
+app.post("/campground/:id/comments",isLogin(),(req,res)=>{
      Campground.findById(req.params.id,(err,campground)=>{
             if(err)
             console.log(err);
@@ -158,9 +150,17 @@ app.post("/register",(req,res)=>{
         res.redirect("/campground"));
     })
 })
-
+app.get("/login",(req,res)=>{
+    res.render("login");
+})
+app.post("/login",passport.authenticate("local",{successRedirect:"/campground",failureRedirect:"/login"}),(req,res)=>{
+    console.log("password submited");
+})
+app.get("/logout",(req,res)=>{
+    req.logout();
+    res.redirect("/campground");
+})
 //Serving App
-
 const PORT = 8000
 app.listen(PORT,()=>{
 
