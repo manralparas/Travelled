@@ -2,7 +2,7 @@ const express= require('express');
 const router = express.Router(); 
 const Campground=require("../models/campground");
 const Comment= require("../models/comment");
-router.get('/campground/new',(req,res)=>
+router.get('/campground/new',isLogin,(req,res)=>
 {
     res.render("campground/new")
 
@@ -35,14 +35,19 @@ router.get('/campground',(req,res)=>{
 
 })
 
-router.post('/campground',(req,res)=>{
+router.post('/campground',isLogin,(req,res)=>{
     const placeName=req.body.name;
     const placeImage=req.body.image;
     const placeDescription= req.body.description;
+    const author={
+        id:req.user._id,
+        username:req.user.username,
+    }
     const create={
         name:placeName,
         image:placeImage,
-        description:placeDescription
+        description:placeDescription,
+        author,author
     };
     Campground.create(create,(err,newone)=>
     {
@@ -55,4 +60,35 @@ router.post('/campground',(req,res)=>{
     })
 
 })
+//Edit Route
+router.get("/campground/:id/edit",(req,res)=>{
+            Campground.findById(req.params.id,(err,found)=>{
+                if(err)
+                console.log(err);
+            res.render("campground/edit",{campground:found});
+            })
+
+});
+//
+router.put("/campground/:id",(req,res)=>{
+        const updatedCampground={
+            name:req.body.name,
+            image:req.body.image,
+            description:req.body.description
+        };
+        Campground.findByIdAndUpdate(req.params.id,updatedCampground,(err,updatedCampground)=>{
+            if(err)
+            console.log(err);
+            else
+            res.redirect("/campground/"+req.params.id);
+        })
+});
+
+
+function isLogin(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login")
+}
 module.exports=router;

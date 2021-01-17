@@ -11,6 +11,7 @@ const express = require("express"),
 const campgroundRoutes=require("./routes/campgrounds");
 const commentRoutes=require("./routes/comments");
 const authRoutes=require("./routes/index");
+const methodOverride= require('method-override');
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------Mongo Secret DNS Seed List--------------------------------------------------------------------------------------------
 const keyUrl = require("./key")
@@ -21,6 +22,7 @@ mongoose.connect(keyUrl,{ useNewUrlParser: true ,useUnifiedTopology: true,});
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs");
 app.use(express.static("public"));
+app.use(methodOverride("_method"));
 //------------------------------------------------------------------------------------------------------------------
 
 //Passport JS Configuration

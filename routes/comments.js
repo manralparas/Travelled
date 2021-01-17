@@ -19,16 +19,16 @@ router.post("/campground/:id/comments",isLogin,(req,res)=>{
             console.log(err);
             else{
                 const content=req.body.content;
-                const author=req.body.author;
                 const comment={
-                    author:author,
                     content:content
                 };
             Comment.create(comment,(err,comment)=>{
                 if(err)
                 console.log(err)
                 else{
-                    console.log(comment);
+                    comment.author.id=req.user._id;
+                    comment.author.username=req.user.username;
+                    comment.save();
                     campground.comments.push(comment);
                     campground.save();
                     res.redirect(`/campground/${campground._id}`);
