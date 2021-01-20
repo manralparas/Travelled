@@ -1,13 +1,13 @@
 const express= require('express');
 const router = express.Router(); 
 const Campground=require("../models/campground");
-const Comment= require("../models/comment");
-router.get('/campground/new',isLogin,(req,res)=>
+const middleware = require("../middleware")
+
+router.get('/campground/new',middleware.isLoggedIn,(req,res)=>
 {
     res.render("campground/new")
 
 })
-
 router.get('/campground/:id',(req,res)=>
 {   //find the id then render the show page with id
     Campground.findById(req.params.id).populate("comments").exec((err,campground)=>{
@@ -35,7 +35,7 @@ router.get('/campground',(req,res)=>{
 
 })
 
-router.post('/campground',isLogin,(req,res)=>{
+router.post('/campground',middleware.isLoggedIn,(req,res)=>{
     const placeName=req.body.name;
     const placeImage=req.body.image;
     const placeDescription= req.body.description;
@@ -61,7 +61,7 @@ router.post('/campground',isLogin,(req,res)=>{
 
 })
 //Edit Route
-router.get("/campground/:id/edit",isValidUser,(req,res)=>{
+router.get("/campground/:id/edit",middleware.isValidUser,(req,res)=>{
             Campground.findById(req.params.id,(err,found)=>{
                 if(err)
                 console.log(err);
@@ -70,7 +70,7 @@ router.get("/campground/:id/edit",isValidUser,(req,res)=>{
 
 });
 //Delete Route
-router.delete("/campground/:id",(req,res)=>{
+router.delete("/campground/:id",middleware.isValidUser,(req,res)=>{
     Campground.findByIdAndRemove(req.params.id,(err)=>{
         if(err)
         console.log(err);
@@ -81,7 +81,7 @@ router.delete("/campground/:id",(req,res)=>{
 })
 
 //Update route
-router.put("/campground/:id",(req,res)=>{
+router.put("/campground/:id",middleware.isValidUser,(req,res)=>{
         const updatedCampground={
             name:req.body.name,
             image:req.body.image,
@@ -96,34 +96,6 @@ router.put("/campground/:id",(req,res)=>{
 });
 
 
-function isLogin(req,res,next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login")
-}
+
 //to check if user have permission
-function isValidUser(req,res,next){
-    if(req.isAuthenticated())
-    {
-        Campground.findById(req.params.id,(err,found)=>{
-            if(err)
-            res.redirect("back");
-             else
-            { 
-                 if(found.author.id.equals(req.user._id))
-                {
-                    next();
-                }
-                else
-                {
-                  res.redirect("back")
-                }
-            }
-    }
-        );
-    }
-    else
-    res.redirect("back");
-}
 module.exports=router;

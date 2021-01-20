@@ -15,7 +15,7 @@ const methodOverride= require('method-override');
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------Mongo Secret DNS Seed List--------------------------------------------------------------------------------------------
 const keyUrl = require("./key")
-mongoose.connect(keyUrl,{ useNewUrlParser: true ,useUnifiedTopology: true,});
+mongoose.connect(keyUrl,{ useNewUrlParser: true ,useUnifiedTopology: true, useFindAndModify: false });
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //Middleware
