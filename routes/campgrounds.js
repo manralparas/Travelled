@@ -61,7 +61,7 @@ router.post('/campground',isLogin,(req,res)=>{
 
 })
 //Edit Route
-router.get("/campground/:id/edit",(req,res)=>{
+router.get("/campground/:id/edit",isValidUser,(req,res)=>{
             Campground.findById(req.params.id,(err,found)=>{
                 if(err)
                 console.log(err);
@@ -69,7 +69,18 @@ router.get("/campground/:id/edit",(req,res)=>{
             })
 
 });
-//
+//Delete Route
+router.delete("/campground/:id",(req,res)=>{
+    Campground.findByIdAndRemove(req.params.id,(err)=>{
+        if(err)
+        console.log(err);
+        else{
+            res.redirect("/campground");
+        }
+    })
+})
+
+//Update route
 router.put("/campground/:id",(req,res)=>{
         const updatedCampground={
             name:req.body.name,
@@ -90,5 +101,29 @@ function isLogin(req,res,next){
         return next();
     }
     res.redirect("/login")
+}
+//to check if user have permission
+function isValidUser(req,res,next){
+    if(req.isAuthenticated())
+    {
+        Campground.findById(req.params.id,(err,found)=>{
+            if(err)
+            res.redirect("back");
+             else
+            { 
+                 if(found.author.id.equals(req.user._id))
+                {
+                    next();
+                }
+                else
+                {
+                  res.redirect("back")
+                }
+            }
+    }
+        );
+    }
+    else
+    res.redirect("back");
 }
 module.exports=router;
