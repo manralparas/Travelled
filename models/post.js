@@ -1,5 +1,5 @@
 const mongoose= require('mongoose');
-const campgroundSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
     name:String,
     image:String,
     description:String,
@@ -16,5 +16,5 @@ const campgroundSchema = new mongoose.Schema({
     }
 
 });
-const Campground = mongoose.model("campground",campgroundSchema);
-module.exports = Campground;
+const Post = mongoose.model("post",postSchema);
+module.exports = Post;

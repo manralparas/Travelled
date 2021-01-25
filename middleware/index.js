@@ -1,4 +1,4 @@
-const Campground=require("../models/campground");
+const Campground=require("../models/post");
 const Comment= require("../models/comment");
 const middlewareObject={};
 middlewareObject.isValidUser=(req,res,next)=>{
@@ -14,7 +14,8 @@ middlewareObject.isValidUser=(req,res,next)=>{
                     next();
                 }
                 else
-                {
+                {req.flash("error","You don't have permission to do that!")
+
                   res.redirect("back")
                 }
             }
@@ -22,7 +23,11 @@ middlewareObject.isValidUser=(req,res,next)=>{
         );
     }
     else
+    {
+
+    req.flash("error","You need to be logged in to do that");
     res.redirect("back");
+    }
 }
 middlewareObject.isValidUserComment=(req,res,next)=>{
     if(req.isAuthenticated())
@@ -37,7 +42,7 @@ middlewareObject.isValidUserComment=(req,res,next)=>{
                     next();
                 }
                 else
-                {
+                { req.flash("error","You don't have permission to do that!")
                   res.redirect("back")
                 }
             }
@@ -45,12 +50,16 @@ middlewareObject.isValidUserComment=(req,res,next)=>{
         );
     }
     else
+    {
+    req.flash("error","You need to be logged in to do that");
     res.redirect("back");
+    }
 }
 middlewareObject.isLoggedIn=(req,res,next)=>{
     if(req.isAuthenticated()){
         return next();
     }
+    req.flash("error","Please Login First!")
     res.redirect("/login")
 }
 module.exports=middlewareObject;

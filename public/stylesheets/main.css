@@ -10,3 +10,18 @@
 #delete-form{
     display:inline;
 }
+
+
+.login{
+    display: flex;
+    justify-content: center;
+    
+}
+.login_h3{
+    text-align: center;
+    margin-top: 50px;
+
+}
+.login form{
+   margin-top: 10px; 
+}

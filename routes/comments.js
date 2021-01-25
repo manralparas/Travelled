@@ -1,21 +1,21 @@
 const express= require('express');
 const router= express.Router();
-const Campground=require("../models/campground");
+const Post=require("../models/post");
 const Comment= require("../models/comment");
 const middleware= require("../middleware");
-router.get("/campground/:id/comments/new",middleware.isLoggedIn,(req,res)=>{
-    Campground.findById(req.params.id,(err,campground)=>{
+router.get("/post/:id/comments/new",middleware.isLoggedIn,(req,res)=>{
+    Post.findById(req.params.id,(err,post)=>{
                 if(err)
                 console.log(err);
                 else
-                res.render("comment/new",{campground:campground});
+                res.render("comment/new",{post:post});
 
     })
 }
 );
 
-router.post("/campground/:id/comments",middleware.isLoggedIn,(req,res)=>{
-     Campground.findById(req.params.id,(err,campground)=>{
+router.post("/post/:id/comments",middleware.isLoggedIn,(req,res)=>{
+     Post.findById(req.params.id,(err,post)=>{
             if(err)
             console.log(err);
             else{
@@ -30,24 +30,25 @@ router.post("/campground/:id/comments",middleware.isLoggedIn,(req,res)=>{
                     comment.author.id=req.user._id;
                     comment.author.username=req.user.username;
                     comment.save();
-                    campground.comments.push(comment);
-                    campground.save();
-                    res.redirect(`/campground/${campground._id}`);
+                    post.comments.push(comment);
+                    post.save();
+                    req.flash("success","comment created successfully")
+                    res.redirect(`/post/${post._id}`);
                 }
             })
             }
      })
 })
-router.get("/campground/:id/comments/:comment_id/edit",middleware.isValidUserComment,(req,res)=>{
+router.get("/post/:id/comments/:comment_id/edit",middleware.isValidUserComment,(req,res)=>{
     Comment.findById(req.params.comment_id,(err,findComment)=>{
         if(err)
         console.log(err);
         else{
-               res.render("comment/edit",{campground_id:req.params.id,comment:findComment});
+               res.render("comment/edit",{post_id:req.params.id,comment:findComment});
         }
     })
 })
-router.put("/campground/:id/comments/:comment_id",middleware.isValidUserComment,(req,res)=>{
+router.put("/post/:id/comments/:comment_id",middleware.isValidUserComment,(req,res)=>{
     const comment={
         content:req.body.content
     }
@@ -55,17 +56,20 @@ router.put("/campground/:id/comments/:comment_id",middleware.isValidUserComment,
         if(err)
         console.log(err)
         else
-        {
-            res.redirect("/campground/"+req.params.id);
+        {   req.flash("success","comment updated successfully")
+            res.redirect("/post/"+req.params.id);
         }
     })
 })
-router.delete("/campground/:id/comments/:comment_id",middleware.isValidUserComment,(req,res)=>{
+router.delete("/post/:id/comments/:comment_id",middleware.isValidUserComment,(req,res)=>{
     Comment.findByIdAndRemove(req.params.comment_id,(err)=>{
         if(err)
         console.log(err)
         else
-        res.redirect("/campground/"+req.params.id);
+        {
+            req.flash("success","comment deleted !")
+        res.redirect("/post/"+req.params.id);
+        }
     });
 }
 );

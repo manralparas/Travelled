@@ -1,8 +1,37 @@
-<%- include ("partials/header") -%>
-
-<h1>Landing page</h1>
-<p>Welcome to landing page of yelp camp</p>
-<a href="/campground">View all camp</a>
-
-
-<%- include("partials/footer")-%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>YelpCamp</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/stylesheets/landing.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript" async></script>
+    </head>
+    <body>
+    
+    <div class="container">
+        <% if(error && error.length > 0){ %>
+            <div class="alert alert-danger" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success && success.length > 0){ %>
+            <div class="alert alert-success" role="alert">
+                <%= success %>
+            </div>
+        <% } %>
+    </div>
+    
+    <div id="landing-header">
+ 		<h1>Welcome to Travely</h1>
+ 		<p>Share or Explore Travel Stories From Around the World</p>
+		<a href="/post/new" class="btn btn-outline-light mr-3">Share</a>
+		<a href="/post" class="btn btn-outline-light">Explore</a>
+    </div>
+    
+    <ul class="slideshow">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
