@@ -20,8 +20,10 @@ mongoose.connect(keyUrl,{ useNewUrlParser: true ,useUnifiedTopology: true, useFi
 
 //Middleware
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json())
 app.set("view engine","ejs");
 app.use(express.static("public"));
+app.use(express.static("uploads"))
 app.use(methodOverride("_method"));
 app.use(flash());
 //------------------------------------------------------------------------------------------------------------------
@@ -54,10 +56,9 @@ app.use(authRoutes);
 
 //--------------------------------------------------------------------------------------------------------------------------------- 
 //Serving App
-const PORT = 8000
+const PORT = process.env.PORT | 8000
 app.listen(PORT,()=>{
 
-console.log(`server running on port ${PORT}
-Welcome to Yelpcamp`);
+console.log(`Server running on port http://localhost:${PORT}`);
 
 })

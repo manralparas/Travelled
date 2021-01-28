@@ -2,11 +2,34 @@ const express= require('express');
 const router = express.Router(); 
 const Post=require("../models/post");
 const middleware = require("../middleware")
+const fs = require('fs');
+const path = require('path');
+
+
+const multer = require('multer'); 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+    cb(null, "./uploads");
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname + '-' + Date.now())
+    }
+});
+ 
+const upload = multer({ storage: storage }).single("image");
+
+
+
 
 router.get('/post/new',middleware.isLoggedIn,(req,res)=>
 {
     res.render("post/new")
 
+})
+router.get('/share',middleware.isLoggedIn,(req,res)=>
+{
+
+    res.render("login");
 })
 router.get('/post/:id',(req,res)=>
 {   //find the id then render the show page with id
@@ -34,9 +57,14 @@ router.get('/post',(req,res)=>{
 
 })
 
-router.post('/post',middleware.isLoggedIn,(req,res)=>{
+router.post('/post',(req,res)=>{
+
+    upload(req, res, function (err) {
+    if (err) {
+        console.log(err)
+      return
+    }
     const placeName=req.body.name;
-    const placeImage=req.body.image;
     const placeDescription= req.body.description;
     const author={
         id:req.user._id,
@@ -44,9 +72,9 @@ router.post('/post',middleware.isLoggedIn,(req,res)=>{
     }
     const create={
         name:placeName,
-        image:placeImage,
+        image:req.file.filename,
         description:placeDescription,
-        author,author
+        author:author
     };
     Post.create(create,(err,newone)=>
     {
@@ -59,6 +87,7 @@ router.post('/post',middleware.isLoggedIn,(req,res)=>{
     })
 
 })
+});
 //Edit Route
 router.get("/post/:id/edit",middleware.isValidUser,(req,res)=>{
             Post.findById(req.params.id,(err,found)=>{
@@ -82,19 +111,24 @@ router.delete("/post/:id",middleware.isValidUser,(req,res)=>{
 
 //Update route
 router.put("/post/:id",middleware.isValidUser,(req,res)=>{
-        const updatedPost={
-            name:req.body.name,
-            image:req.body.image,
-            description:req.body.description
-        };
-        Post.findByIdAndUpdate(req.params.id,updatedPost,(err,updatedPost)=>{
+                const updatedPost = {
+                    name:req.body.name,
+                    description:req.body.description
+                };
+                console.log(updatedPost);
+                
+            Post.findByIdAndUpdate(req.params.id,updatedPost,(err,updatedPost)=>{
             if(err)
             console.log(err);
             else
-            {
+            {                  
                 req.flash("success","Post updated Successfully")
-            res.redirect("/post/"+req.params.id);
+                                
+                res.redirect("/post/"+req.params.id);
+
             }
+                
+            
         })
 });
 

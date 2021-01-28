@@ -1,3 +1,11 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.bg-green{
+    background-color: #FF8C42;
+}
+
 .thumbnail{
     padding: 5px;
 }
@@ -7,7 +15,7 @@
 .thumbnail .caption-full{
     padding: 9px;
 }
-#delete-form{
+#form1{
     display:inline;
 }
 
@@ -24,4 +32,56 @@
 }
 .login form{
    margin-top: 10px; 
+}
+.jumbotron{
+   
+    height: 250px;
+    width: 100%;
+    padding: 25px;
+    background-color: #FFF275;
+}
+
+.eye-helper{
+    text-decoration: none; 
+    margin: 2px auto;
+    padding: 2px;
+
+}
+.eye-helper:hover{
+    text-decoration: none;
+}
+.title-helper{
+    font-family: sans-serif;
+    text-align: center;
+    font-size: 22px;
+}
+.image-helper{
+    height: 480px;
+    width: 720px;
+    object-fit: contain;
+}
+.card-helper2{
+    margin: 10px;
+}
+.delete-helper{
+    background: transparent;
+    display: inline;
+    border: 0;
+    color: blue;
+}
+.edit-helper{
+    text-decoration: none;
+}
+.edit-helper:hover{
+    text-decoration: none;
+
+}
+.add-helper{
+    background-color: transparent;
+    width: fit-content;
+    border: 0;
+    outline: transparent;
+    padding: 0;
+    color: blue;
+    
 }
