@@ -70,11 +70,13 @@
     color: blue;
 }
 .edit-helper{
+
     text-decoration: none;
+    color:blue;
 }
 .edit-helper:hover{
     text-decoration: none;
-
+    color:blue;
 }
 .add-helper{
     background-color: transparent;
