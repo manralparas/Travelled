@@ -45,13 +45,13 @@ router.get('/post/:id',(req,res)=>
 })
 
 router.get('/post',(req,res)=>{
-  Post.find({},(err,post)=>{
+  Post.find({},(err,foundpost)=>{
        if(err)
        {
            console.log(err);
        }
        else{
-            res.render("post/explore",{post:post});
+            res.render("post/explore",{post:foundpost});
        }
    }) 
 
@@ -64,19 +64,21 @@ router.post('/post',(req,res)=>{
         console.log(err)
       return
     }
+    console.log(req.body)
+    
     const placeName=req.body.name;
     const placeDescription= req.body.description;
     const author={
         id:req.user._id,
         username:req.user.username,
     }
-    const create={
+    const newPost={
         name:placeName,
         image:req.file.filename,
         description:placeDescription,
         author:author
     };
-    Post.create(create,(err,newone)=>
+    Post.create(newPost,(err,newone)=>
     {
         if(err)
         console.log(err);
