@@ -1,6 +1,13 @@
 const mongoose= require('mongoose');
 const postSchema = new mongoose.Schema({
     name:String,
+    likeCount:Number,
+    like:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User"
+        }
+    ],
     image:String,
     description:String,
     comments:[{

@@ -87,3 +87,17 @@
     color: blue;
     
 }
+.like{
+    font-size:18px;
+    display: flex;
+    outline: transparent;
+}
+
+.like-helper{
+    background-color: transparent;
+    margin:4px;
+    width: fit-content;
+    border: 0;
+    outline: transparent;
+    padding: 0;
+}

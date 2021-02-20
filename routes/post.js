@@ -2,6 +2,7 @@ const express= require('express');
 const router = express.Router(); 
 const Post=require("../models/post");
 const middleware = require("../middleware")
+const User = require("../models/user")
 const fs = require('fs');
 const path = require('path');
 
@@ -90,6 +91,35 @@ router.post('/post',(req,res)=>{
 
 })
 });
+router.post("/like/:id",middleware.isLoggedIn,(req,res)=>{
+    Post.findById(req.params.id,(err,found)=>{
+
+        found.likeCount++;
+        found.like.push(req.user.id);
+        found.save();
+        User.findById(req.user.id,(err,foundUser)=>{
+                foundUser.likePost.push(found.id);
+                foundUser.save();
+        }) 
+    })
+
+    res.redirect('/post');
+
+});
+router.post("/unlike/:id",middleware.isLoggedIn,(req,res)=>{
+    Post.findById(req.params.id,(err,found)=>{
+        found.likeCount--;
+        newLike = found.like.filter((id)=>!id.equals(req.user.id));
+        found.like=[...newLike];
+        found.save();
+        User.findById(req.user.id,(err,foundUser)=>{
+            newLikePost=foundUser.likePost.filter((id)=>!id.equals(found.id));
+            foundUser.likePost=[...newLikePost];
+            foundUser.save();
+        })
+    })
+    res.redirect('/post');
+})
 //Edit Route
 router.get("/post/:id/edit",middleware.isValidUser,(req,res)=>{
             Post.findById(req.params.id,(err,found)=>{
