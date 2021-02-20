@@ -93,7 +93,9 @@ router.post('/post',(req,res)=>{
 });
 router.post("/like/:id",middleware.isLoggedIn,(req,res)=>{
     Post.findById(req.params.id,(err,found)=>{
-
+        if(found.like.some(e=>e.equals(req.user.id)))
+        res.redirect('/post');
+        else{
         found.likeCount++;
         found.like.push(req.user.id);
         found.save();
@@ -101,10 +103,11 @@ router.post("/like/:id",middleware.isLoggedIn,(req,res)=>{
                 foundUser.likePost.push(found.id);
                 foundUser.save();
         }) 
+        }
     })
 
     res.redirect('/post');
-
+    
 });
 router.post("/unlike/:id",middleware.isLoggedIn,(req,res)=>{
     Post.findById(req.params.id,(err,found)=>{
