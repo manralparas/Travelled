@@ -31,7 +31,16 @@
                   <div class="card-body">
                     <h5 class="card-title"><%= element.name %> </h5>
                     <p class="card-text"><%= element.description.substring(0,50) %>...<span class=""><a title="Read more" href="/post/<%= element._id %>" class="fas fa-eye eye-helper"></a></span> </p>
-
+                  <div class="like">  <p><%=element.likeCount%></p>
+                    <% if(currentUser){ %> 
+                    <%if (element.like.some(e=>e.equals(currentUser._id))) {%>
+                    <form  action="/unlike/<%= element._id%>" method="post"><button class="fa fa-heart like-helper"type="submit"></button></form>
+                    <%} else {%> 
+                    <form action="/like/<%= element._id%>" method="post"><button class="far fa-heart like-helper" type="submit"></button></form>
+                    <% } }else{%>
+                    <form action="/like/<%= element._id%>" method="post"><button class="far fa-heart like-helper" type="submit"></button></form>
+                    <%}  %>  
+                  </div>
                   </div>
                 </div>
          </div>
