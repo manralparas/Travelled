@@ -33,6 +33,11 @@
 .login form{
    margin-top: 10px; 
 }
+.footer
+{
+    position: fixed;
+    bottom: 0;
+}
 .jumbotron{
    
     height: 250px;
@@ -49,6 +54,21 @@
 }
 .eye-helper:hover{
     text-decoration: none;
+}
+
+.comment-helper{
+    color:inherit;
+    text-decoration: none;
+    margin: 2px 2px ;
+    padding :2px;
+}
+
+.like > p{
+    margin-left: 3px;
+}
+.comment-helper:hover{
+    text-decoration: none;
+    color:inherit;
 }
 .title-helper{
     font-family: sans-serif;
@@ -68,6 +88,10 @@
     display: inline;
     border: 0;
     color: blue;
+}
+.container{
+    margin-bottom: 5px;
+    padding:15px; 
 }
 .edit-helper{
 

@@ -77,7 +77,9 @@ router.post('/post',(req,res)=>{
         name:placeName,
         image:req.file.filename,
         description:placeDescription,
-        author:author
+        author:author,
+        likeCount:0,
+        commentCount:0,
     };
     Post.create(newPost,(err,newone)=>
     {

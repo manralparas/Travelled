@@ -31,6 +31,7 @@ router.post("/post/:id/comments",middleware.isLoggedIn,(req,res)=>{
                     comment.author.username=req.user.username;
                     comment.save();
                     post.comments.push(comment);
+                    post.commentCount++;
                     post.save();
                     req.flash("success","comment created successfully")
                     res.redirect(`/post/${post._id}`);
@@ -50,6 +51,7 @@ router.get("/post/:id/comments/:comment_id/edit",middleware.isValidUserComment,(
 })
 router.put("/post/:id/comments/:comment_id",middleware.isValidUserComment,(req,res)=>{
     const comment={
+
         content:req.body.content
     }
     Comment.findByIdAndUpdate(req.params.comment_id,comment,(err,updatedComment)=>{
@@ -62,6 +64,13 @@ router.put("/post/:id/comments/:comment_id",middleware.isValidUserComment,(req,r
     })
 })
 router.delete("/post/:id/comments/:comment_id",middleware.isValidUserComment,(req,res)=>{
+    
+    Post.findById(req.params.id,(err,post)=>{
+        if(err)
+        console.log(err);
+        post.commentCount--;
+        post.save();
+    })
     Comment.findByIdAndRemove(req.params.comment_id,(err)=>{
         if(err)
         console.log(err)
