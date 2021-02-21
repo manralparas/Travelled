@@ -1,6 +1,6 @@
 {
-  "name": "holidaynation",
-  "version": "1.0.0",
+  "name": "travelled",
+  "version": "1.2.0",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,5 +22,5 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1"
   },
-  "description": ""
+  "description": "Travelled is social network for travellers to share travel stories"
 }
