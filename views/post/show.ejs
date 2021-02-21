@@ -14,7 +14,7 @@
                 </p>
                 <% if(currentUser&&post.author.id.equals(currentUser._id)) { %> 
                     <a class="fas fa-pencil-alt edit-helper" href="/post/<%= post._id %>/edit" >Edit</a>
-                    <form id="form1" action="/post/<%=post._id%>/?_method=DELETE" method="POST" >
+                   <form id="form1" action="/post/<%=post._id%>/?_method=DELETE" method="POST" >
                         <button class="fas fa-trash-alt delete-helper">Delete</button>
                     </form>
                 <% } %> 
@@ -42,11 +42,6 @@
 </div>
 
 </div>
-<div class="text-center">
-</div>
-<p>
-</p>
-
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -55,6 +50,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
+
       <div class="modal-body">
              <form action="/post/<%=post._id%>/comments" method="POST" method="POST">
              <div class="form-group"> <input  class="form-control" type="text" placeholder="Comment" name="content"></div>
@@ -68,5 +64,6 @@
 </div>
 
 
-<%- include('../partials/footer')  -%>
 
+
+<%- include('../partials/footer')  -%>
