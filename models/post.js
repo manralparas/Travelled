@@ -10,6 +10,7 @@ const postSchema = new mongoose.Schema({
     ],
     image:String,
     description:String,
+    commentCount:Number,
     comments:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Comment"
