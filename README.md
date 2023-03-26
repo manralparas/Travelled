@@ -1,4 +1,4 @@
-# Travelled      (<a href="https://traveled11.herokuapp.com/">Deployment</a>)   
+# Travelled      (<a href="https://eight-roan-parrotfish.glitch.me/">Deployment</a>)   
 Travelled - Social network for travellers Web App made using node js, express js, MongoDB, bootstrap, passport js  
 <br/>
 Share your travel stories or browse stories 
